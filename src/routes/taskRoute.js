@@ -10,7 +10,7 @@ router.post("/tasks", async (req, res) => {
     const { title, description, status } = req.body;
     const task = TaskRepository.create({ title, description, status });
     await TaskRepository.save(task);
-    res.status(201).json(task);
+    res.status(201).json({data:task});
   } catch (error) {
     console.error("Failed to create task", error);
     res.status(500).json({ error: "Failed to create task" });
@@ -21,7 +21,7 @@ router.post("/tasks", async (req, res) => {
 router.get("/tasks", async (req, res) => {
   try {
     const tasks = await TaskRepository.find();
-    res.status(200).json(tasks);
+    res.status(200).json({data:tasks});
   } catch (error) {
     console.error("Failed to fetch tasks", error);
     res.status(500).json({ error: "Failed to fetch tasks" });
@@ -34,7 +34,7 @@ router.get("/tasks/:id", async (req, res) => {
     const { id } = req.params;
     const task = await TaskRepository.findOne({ where: { id } });
     if (!task) return res.status(404).json({ error: "Task not found" });
-    res.status(200).json(task);
+    res.status(200).json({data:task});
   } catch (error) {
     console.error("Failed to fetch task", error);
     res.status(500).json({ error: "Failed to fetch task" });
@@ -54,7 +54,7 @@ router.put("/tasks/:id", async (req, res) => {
     task.status = status || task.status;
 
     await TaskRepository.save(task);
-    res.status(200).json(task);
+    res.status(200).json({data:task});
   } catch (error) {
     console.error("Failed to update task", error);
     res.status(500).json({ error: "Failed to update task" });
@@ -69,7 +69,7 @@ router.delete("/tasks/:id", async (req, res) => {
     if (!task) return res.status(404).json({ error: "Task not found" });
 
     await TaskRepository.remove(task);
-    res.status(200).json({ message: "Task deleted successfully" });
+    res.status(200).json({data:task, message: "Task deleted successfully" });
   } catch (error) {
     console.error("Failed to delete task", error);
     res.status(500).json({ error: "Failed to delete task" });
